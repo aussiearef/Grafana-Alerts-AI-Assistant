@@ -63,15 +63,4 @@ When you click Investigate:
 **Q: Does this work without Internet access?**  
 A: No. The LLM integration requires outbound access to your provider.
 
----
 
-## Author
-
-Aref Karimi  
-https://github.com/arefkarimi
-
----
-
-## License
-
-MIT License
