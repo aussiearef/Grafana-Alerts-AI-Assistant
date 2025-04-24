@@ -1,136 +1,77 @@
-# Grafana app plugin template
+# Alert AI Assistant for Grafana
 
-This template is a starting point for building an app plugin for Grafana.
+Alert AI Assistant is a Grafana app plugin that enhances your alert observability workflows with AI-powered root cause analysis, severity classification, and actionable remediation guidance — all integrated directly within Grafana.
 
-## What are Grafana app plugins?
+Powered by OpenAI and the Grafana LLM plugin.
 
-App plugins can let you create a custom out-of-the-box monitoring experience by custom pages, nested data sources and panel plugins.
+---
 
-## Get started
+## Features
 
-### Backend
+- View all firing alerts in real time
+- Use AI to:
+  - Categorise the alert as Warning or Critical.   
+  - Provide Root Cause Analysis.
+  - Provide Remediation Steps.
 
-1. Update [Grafana plugin SDK for Go](https://grafana.com/developers/plugin-tools/key-concepts/backend-plugins/grafana-plugin-sdk-for-go) dependency to the latest minor version:
+---
 
-   ```bash
-   go get -u github.com/grafana/grafana-plugin-sdk-go
-   go mod tidy
-   ```
+## Getting Started
 
-2. Build backend plugin binaries for Linux, Windows and Darwin:
+### Requirements
 
-   ```bash
-   mage -v
-   ```
+- Grafana v10.4.0 or later
+- Grafana LLM App Plugin installed and configured with an OpenAI api key.
 
-3. List all available Mage targets for additional commands:
+### Installation (Local Development)
 
-   ```bash
-   mage -l
-   ```
+```bash
+# Clone the plugin
+git clone https://github.com/aussiearef/Grafana-Alerts-AI-Assistant.git
+cd alert-ai-assistant
 
-### Frontend
+# Install dependencies
+npm install
 
-1. Install dependencies
+# Start Grafana in plugin dev mode
+npm run dev
+```
 
-   ```bash
-   npm install
-   ```
+Then navigate to http://localhost:3000 → Apps → Alert AI Assistant.
 
-2. Build plugin in development mode and run in watch mode
+---
 
-   ```bash
-   npm run dev
-   ```
+## Plugin Architecture
 
-3. Build plugin in production mode
+- Frontend only: React + Emotion CSS + Grafana UI components
+- LLM integration via Grafana's plugin proxy endpoint
+- Alert and rule data retrieved from Grafana's internal APIs
 
-   ```bash
-   npm run build
-   ```
 
-4. Run the tests (using Jest)
+## How It Works
 
-   ```bash
-   # Runs the tests and watches for changes, requires git init first
-   npm run test
+When you click Investigate:
 
-   # Exits after running all the tests
-   npm run test:ci
-   ```
+1. The plugin extracts the alert name, query, and threshold
+2. It sends a structured prompt to the LLM plugin
+3. The AI model returns JSON-formatted insights
+4. The result is displayed in a modal with a structured layout
 
-5. Spin up a Grafana instance and run the plugin inside it (using Docker)
 
-   ```bash
-   npm run server
-   ```
+## FAQ
 
-6. Run the E2E tests (using Playwright)
+**Q: Does this work without Internet access?**  
+A: No. The LLM integration requires outbound access to your provider.
 
-   ```bash
-   # Spins up a Grafana instance first that we tests against
-   npm run server
+---
 
-   # If you wish to start a certain Grafana version. If not specified will use latest by default
-   GRAFANA_VERSION=11.3.0 npm run server
+## Author
 
-   # Starts the tests
-   npm run e2e
-   ```
+Aref Karimi  
+https://github.com/arefkarimi
 
-7. Run the linter
+---
 
-   ```bash
-   npm run lint
+## License
 
-   # or
-
-   npm run lint:fix
-   ```
-
-# Distributing your plugin
-
-When distributing a Grafana plugin either within the community or privately the plugin must be signed so the Grafana application can verify its authenticity. This can be done with the `@grafana/sign-plugin` package.
-
-_Note: It's not necessary to sign a plugin during development. The docker development environment that is scaffolded with `@grafana/create-plugin` caters for running the plugin without a signature._
-
-## Initial steps
-
-Before signing a plugin please read the Grafana [plugin publishing and signing criteria](https://grafana.com/legal/plugins/#plugin-publishing-and-signing-criteria) documentation carefully.
-
-`@grafana/create-plugin` has added the necessary commands and workflows to make signing and distributing a plugin via the grafana plugins catalog as straightforward as possible.
-
-Before signing a plugin for the first time please consult the Grafana [plugin signature levels](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) documentation to understand the differences between the types of signature level.
-
-1. Create a [Grafana Cloud account](https://grafana.com/signup).
-2. Make sure that the first part of the plugin ID matches the slug of your Grafana Cloud account.
-   - _You can find the plugin ID in the `plugin.json` file inside your plugin directory. For example, if your account slug is `acmecorp`, you need to prefix the plugin ID with `acmecorp-`._
-3. Create a Grafana Cloud API key with the `PluginPublisher` role.
-4. Keep a record of this API key as it will be required for signing a plugin
-
-## Signing a plugin
-
-### Using Github actions release workflow
-
-If the plugin is using the github actions supplied with `@grafana/create-plugin` signing a plugin is included out of the box. The [release workflow](./.github/workflows/release.yml) can prepare everything to make submitting your plugin to Grafana as easy as possible. Before being able to sign the plugin however a secret needs adding to the Github repository.
-
-1. Please navigate to "settings > secrets > actions" within your repo to create secrets.
-2. Click "New repository secret"
-3. Name the secret "GRAFANA_API_KEY"
-4. Paste your Grafana Cloud API key in the Secret field
-5. Click "Add secret"
-
-#### Push a version tag
-
-To trigger the workflow we need to push a version tag to github. This can be achieved with the following steps:
-
-1. Run `npm version <major|minor|patch>`
-2. Run `git push origin main --follow-tags`
-
-## Learn more
-
-Below you can find source code for existing app plugins and other related documentation.
-
-- [Basic app plugin example](https://github.com/grafana/grafana-plugin-examples/tree/master/examples/app-basic#readme)
-- [`plugin.json` documentation](https://grafana.com/developers/plugin-tools/reference/plugin-jsonplugin-json)
-- [Sign a plugin](https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin)
+MIT License
