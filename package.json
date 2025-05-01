@@ -11,7 +11,7 @@
     "lint:fix": "npm run lint -- --fix && prettier --write --list-different .",
     "e2e": "playwright test",
     "server": "docker compose up --build",
-    "sign": "npx @grafana/sign-plugin@latest --signatureType private --rootUrls http://localhost:4000"
+    "sign": "npx --yes @grafana/sign-plugin@latest"
   },
   "author": "Aref karimi",
   "license": "Apache-2.0",
